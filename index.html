@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mustafa Kaife</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --deep-yellow: #FFA500;
+            --cream: #FFF8E1;
+            --dark-accent: #5D4037;
+            --text-dark: #333;
+            --text-light: #555;
+            --healthy: #4CAF50;
+            --overweight: #FFC107;
+            --obese: #F44336;
+            --underweight: #2196F3;
+            --warning: #FF9800;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--cream);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .assessment-container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: fadeInUp 0.5s ease;
+            position: relative;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        header {
+            background-color: var(--deep-yellow);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .language-switcher {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .language-switcher:hover {
+            background-color: rgba(255,255,255,0.3);
+            transform: translateY(-1px);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            height: 50px;
+            width: auto;
+            border-radius: 50%;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .assessment-body {
+            padding: 30px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-accent);
+        }
+        
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--deep-yellow);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(255,165,0,0.2);
+        }
+        
+        .unit {
+            position: absolute;
+            right: 15px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--deep-yellow);
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #FF8C00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .result-container {
+            margin-top: 30px;
+            padding: 30px;
+            border-radius: 12px;
+            background-color: #f5f5f5;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .result-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .result-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark-accent);
+            margin-bottom: 10px;
+        }
+        
+        .bmi-value {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .result-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .result-card h3 {
+            color: var(--dark-accent);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .result-card h3 i {
+            color: var(--deep-yellow);
+        }
+        
+        .warning {
+            background-color: #FFF3E0;
+            border-left: 5px solid var(--warning);
+        }
+        
+        .warning h3 {
+            color: var(--warning);
+        }
+        
+        .solution {
+            background-color: #E8F5E9;
+            border-left: 5px solid var(--healthy);
+        }
+        
+        .solution h3 {
+            color: var(--healthy);
+        }
+        
+        .recommendation {
+            background-color: #E3F2FD;
+            border-left: 5px solid var(--underweight);
+        }
+        
+        .recommendation h3 {
+            color: var(--underweight);
+        }
+        
+        .bmi-scale {
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(90deg, var(--underweight), var(--healthy), var(--overweight), var(--obese));
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .bmi-indicator {
+            position: absolute;
+            top: -10px;
+            width: 4px;
+            height: 40px;
+            background-color: black;
+            transform: translateX(-50%);
+        }
+        
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        .health-status {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .status-item {
+            text-align: center;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .progress-container {
+            margin: 25px 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--deep-yellow);
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        .tips-list {
+            list-style-type: none;
+        }
+        
+        .tips-list li {
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .tips-list li:before {
+            content: "•";
+            color: var(--deep-yellow);
+            font-size: 24px;
+            position: absolute;
+            left: 10px;
+            top: -5px;
+        }
+        
+        .detailed-info {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .detailed-info p {
+            margin-bottom: 10px;
+        }
+        
+        .suggestion-card {
+            background-color: #F5F5F5;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--deep-yellow);
+        }
+        
+        .suggestion-card h4 {
+            margin-bottom: 10px;
+            color: var(--dark-accent);
+        }
+        
+        .health-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .metric-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .metric-card h4 {
+            margin-bottom: 10px;
+            color: var(--dark-accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        @media (max-width: 600px) {
+            .assessment-container {
+                border-radius: 12px;
+            }
+            
+            header {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .assessment-body {
+                padding: 20px;
+            }
+            
+            .bmi-value {
+                font-size: 36px;
+            }
+            
+            .result-title {
+                font-size: 20px;
+            }
+            
+            .language-switcher {
+                top: 10px;
+                right: 10px;
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+            
+            .health-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="assessment-container">
+        <header>
+            <button class="language-switcher" id="languageSwitcher">
+                <i class="fas fa-language"></i>
+                <span id="languageText">Kurdî</span>
+            </button>
+            <div class="logo-container">
+                <img src="https://cdn.solo.to/user/a/668d94bac1a774_92482248.jpg" alt="Health Logo" class="logo">
+                <div>
+                    <h1 id="appTitle">Advanced Health Assessment </h1>
+                    <p class="subtitle" id="appSubtitle">Get personalized health analysis based on your metrics</p>
+                    <h6>Prepared By: Mustafa Kaife Shexani</h6>
+                </div>
+            </div>
+        </header>
+        
+        <div class="assessment-body">
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="gender" id="genderLabel">Gender</label>
+                    <select id="gender">
+                        <option value="" id="selectGenderOption">Select Gender</option>
+                        <option value="male" id="maleOption">Male</option>
+                        <option value="female" id="femaleOption">Female</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="age" id="ageLabel">Age</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="age" placeholder="Enter your age" min="2" max="120">
+                        <span class="unit" id="ageUnit">years</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="height" id="heightLabel">Height</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="height" placeholder="Enter your height">
+                        <span class="unit" id="heightUnit">cm</span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="weight" id="weightLabel">Weight</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="weight" placeholder="Enter your weight">
+                        <span class="unit" id="weightUnit">kg</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn" id="analyzeBtn">
+                <i class="fas fa-heartbeat"></i> <span id="analyzeText">Analyze My Health</span>
+            </button>
+            
+            <div class="result-container" id="resultContainer">
+                <div class="result-header">
+                    <h2 class="result-title" id="resultTitle">Your Health Assessment</h2>
+                    <div class="health-status">
+                        <div class="status-item" id="bmiStatus">BMI: --</div>
+                        <div class="status-item" id="weightStatus">Weight: --</div>
+                        <div class="status-item" id="ageStatus">Age: --</div>
+                    </div>
+                </div>
+                
+                <div class="bmi-value" id="bmiValue">--</div>
+                
+                <div class="bmi-scale">
+                    <div class="bmi-indicator" id="bmiIndicator"></div>
+                </div>
+                <div class="scale-labels">
+                    <span id="underweightLabel">Underweight<br>&lt; 18.5</span>
+                    <span id="healthyLabel">Healthy<br>18.5 - 24.9</span>
+                    <span id="overweightLabel">Overweight<br>25 - 29.9</span>
+                    <span id="obeseLabel">Obese<br>30+</span>
+                </div>
+                
+                <div class="health-metrics">
+                    <div class="metric-card">
+                        <h4><i class="fas fa-heart"></i> <span id="bmiCategoryTitle">BMI Category</span></h4>
+                        <div class="metric-value" id="bmiCategoryValue">--</div>
+                        <div class="metric-label" id="bmiCategoryDesc">Based on WHO standards</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4><i class="fas fa-weight"></i> <span id="weightCategoryTitle">Weight Status</span></h4>
+                        <div class="metric-value" id="weightCategoryValue">--</div>
+                        <div class="metric-label" id="weightCategoryDesc">Compared to ideal range</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4><i class="fas fa-burn"></i> <span id="bmrTitle">BMR</span></h4>
+                        <div class="metric-value" id="bmrValue">--</div>
+                        <div class="metric-label" id="bmrDesc">Calories/day at rest</div>
+                    </div>
+                    <div class="metric-card">
+                        <h4><i class="fas fa-fire"></i> <span id="tdeeTitle">TDEE</span></h4>
+                        <div class="metric-value" id="tdeeValue">--</div>
+                        <div class="metric-label" id="tdeeDesc">Estimated daily calories</div>
+                    </div>
+                </div>
+                
+                <div class="result-card warning" id="problemCard">
+                    <h3><i class="fas fa-exclamation-triangle"></i> <span id="problemTitle">Potential Health Concerns</span></h3>
+                    <div id="healthProblems">
+                        <p id="defaultProblemText">Complete the form to see potential health risks based on your metrics.</p>
+                    </div>
+                </div>
+                
+                <div class="result-card solution" id="solutionCard">
+                    <h3><i class="fas fa-lightbulb"></i> <span id="solutionTitle">Recommended Solutions</span></h3>
+                    <div id="healthSolutions">
+                        <p id="defaultSolutionText">Complete the form to get personalized health recommendations.</p>
+                    </div>
+                </div>
+                
+                <div class="result-card recommendation">
+                    <h3><i class="fas fa-clipboard-list"></i> <span id="actionPlanTitle">Action Plan</span></h3>
+                    <ul class="tips-list" id="actionPlan">
+                        <li id="defaultActionText">Enter your information to generate a personalized action plan</li>
+                    </ul>
+                </div>
+                
+                <div class="progress-container">
+                    <h3><i class="fas fa-chart-line"></i> <span id="progressTitle">Your Health Progress</span></h3>
+                    <p id="progressDescription">Based on your metrics, here's how you're doing:</p>
+                    <div class="progress-bar">
+                        <div class="progress" id="healthProgress"></div>
+                    </div>
+                    <div class="progress-labels">
+                        <span id="progressLow">Needs Improvement</span>
+                        <span id="progressHigh">Excellent Health</span>
+                    </div>
+                </div>
+                
+                <div class="suggestion-card">
+                    <h4 id="suggestionTitle">Health Improvement Suggestions</h4>
+                    <p id="suggestionText">After analyzing your data, we'll provide personalized suggestions for improving your health.</p>
+                    <div id="detailedSuggestions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Language management
+            const languageSwitcher = document.getElementById('languageSwitcher');
+            const languageText = document.getElementById('languageText');
+            let currentLanguage = 'english';
+            
+            // English translations
+            const englishTranslations = {
+                appTitle: "Advanced Health Assessment",
+                appSubtitle: "Get personalized health analysis based on your metrics",
+                languageText: "Kurdî",
+                genderLabel: "Gender",
+                selectGenderOption: "Select Gender",
+                maleOption: "Male",
+                femaleOption: "Female",
+                ageLabel: "Age",
+                ageUnit: "years",
+                heightLabel: "Height",
+                heightUnit: "cm",
+                weightLabel: "Weight",
+                weightUnit: "kg",
+                analyzeText: "Analyze My Health",
+                resultTitle: "Your Health Assessment",
+                underweightLabel: "Underweight<br>&lt; 18.5",
+                healthyLabel: "Healthy<br>18.5 - 24.9",
+                overweightLabel: "Overweight<br>25 - 29.9",
+                obeseLabel: "Obese<br>30+",
+                problemTitle: "Potential Health Concerns",
+                defaultProblemText: "Complete the form to see potential health risks based on your metrics.",
+                solutionTitle: "Recommended Solutions",
+                defaultSolutionText: "Complete the form to get personalized health recommendations.",
+                actionPlanTitle: "Action Plan",
+                defaultActionText: "Enter your information to generate a personalized action plan",
+                progressTitle: "Your Health Progress",
+                progressDescription: "Based on your metrics, here's how you're doing:",
+                progressLow: "Needs Improvement",
+                progressHigh: "Excellent Health",
+                suggestionTitle: "Health Improvement Suggestions",
+                suggestionText: "After analyzing your data, we'll provide personalized suggestions for improving your health.",
+                bmiCategoryTitle: "BMI Category",
+                bmiCategoryDesc: "Based on WHO standards",
+                weightCategoryTitle: "Weight Status",
+                weightCategoryDesc: "Compared to ideal range",
+                bmrTitle: "BMR",
+                bmrDesc: "Calories/day at rest",
+                tdeeTitle: "TDEE",
+                tdeeDesc: "Estimated daily calories"
+            };
+            
+            // Kurdish translations
+            const kurdishTranslations = {
+                appTitle: "پێوانەیی تەندروستی پێشکەوتوو",
+                appSubtitle: "شیکردنەوەی تەندروستی کەسیکراو بەپێی پێوانەکانت",
+                languageText: "English",
+                genderLabel: "رەگەز",
+                selectGenderOption: "رەگەز هەڵبژێرە",
+                maleOption: "نێر",
+                femaleOption: "مێ",
+                ageLabel: "تەمەن",
+                ageUnit: "ساڵ",
+                heightLabel: "باڵا",
+                heightUnit: "سم",
+                weightLabel: "کێش",
+                weightUnit: "کگ",
+                analyzeText: "شیکردنەوەی تەندروستیم",
+                resultTitle: "پێوانەیی تەندروستیت",
+                underweightLabel: "کێشی کەم<br>&lt; ١٨.٥",
+                healthyLabel: "تەندروست<br>١٨.٥ - ٢٤.٩",
+                overweightLabel: "کێشی زۆر<br>٢٥ - ٢٩.٩",
+                obeseLabel: "قەڵەو<br>٣٠+",
+                problemTitle: "کێشەکانی تەندروستی",
+                defaultProblemText: "فۆرمەکە پڕبکەرەوە بۆ بینینی مەترسییەکانی تەندروستی.",
+                solutionTitle: "چارەسەرە پێشنیارکراوەکان",
+                defaultSolutionText: "فۆرمەکە پڕبکەرەوە بۆ وەرگرتنی ئامۆژگاری تەندروستی کەسیکراو.",
+                actionPlanTitle: "پلانی کردار",
+                defaultActionText: "زانیارییەکانت بنووسە بۆ دروستکردنی پلانی کرداری کەسیکراو",
+                progressTitle: "پێشکەوتنی تەندروستیت",
+                progressDescription: "بەپێی پێوانەکانت، ئەمە ئەوەیە کە چۆن دەکەویت:",
+                progressLow: "پێویستی بە باشترکردن هەیە",
+                progressHigh: "تەندروستی نایاب",
+                suggestionTitle: "پێشنیار بۆ باشترکردنی تەندروستی",
+                suggestionText: "دوای شیکردنەوەی زانیارییەکانت، ئامۆژگاری کەسیکراومان پێت دەدەین.",
+                bmiCategoryTitle: "جۆری BMI",
+                bmiCategoryDesc: "بەپێی ستانداردەکانی WHO",
+                weightCategoryTitle: "دۆخی کێش",
+                weightCategoryDesc: "بەراورد بە پێوانەی ئامانج",
+                bmrTitle: "BMR",
+                bmrDesc: "کالۆری/رۆژ لە پشوودا",
+                tdeeTitle: "TDEE",
+                tdeeDesc: "خەمڵاندنی کالۆری ڕۆژانە"
+            };
+            
+            // UI elements to translate
+            const elementsToTranslate = [
+                'appTitle', 'appSubtitle', 'languageText', 'genderLabel', 'selectGenderOption',
+                'maleOption', 'femaleOption', 'ageLabel', 'heightLabel', 'weightLabel',
+                'analyzeText', 'resultTitle', 'problemTitle', 'defaultProblemText',
+                'solutionTitle', 'defaultSolutionText', 'actionPlanTitle', 'defaultActionText',
+                'progressTitle', 'progressDescription', 'progressLow', 'progressHigh',
+                'suggestionTitle', 'suggestionText', 'underweightLabel', 'healthyLabel',
+                'overweightLabel', 'obeseLabel', 'bmiCategoryTitle', 'bmiCategoryDesc',
+                'weightCategoryTitle', 'weightCategoryDesc', 'bmrTitle', 'bmrDesc',
+                'tdeeTitle', 'tdeeDesc'
+            ];
+            
+            // Language switch handler
+            languageSwitcher.addEventListener('click', function() {
+                currentLanguage = currentLanguage === 'english' ? 'kurdish' : 'english';
+                const translations = currentLanguage === 'english' ? englishTranslations : kurdishTranslations;
+                
+                // Update all translatable elements
+                elementsToTranslate.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        if (id === 'maleOption' || id === 'femaleOption' || id === 'selectGenderOption') {
+                            // For select options, we need to update the value text
+                            element.textContent = translations[id];
+                        } else {
+                            // For other elements, we can use innerHTML if it contains HTML
+                            element.innerHTML = translations[id];
+                        }
+                    }
+                });
+                
+                // Update placeholders
+                document.getElementById('age').placeholder = currentLanguage === 'english' ? "Enter your age" : "تەمەنت بنووسە";
+                document.getElementById('height').placeholder = currentLanguage === 'english' ? "Enter your height" : "باڵات بنووسە";
+                document.getElementById('weight').placeholder = currentLanguage === 'english' ? "Enter your weight" : "کێشت بنووسە";
+                
+                // If results are showing, update them too
+                if (document.getElementById('resultContainer').style.display === 'block') {
+                    updateResultsForLanguage();
+                }
+            });
+            
+            // Health assessment functionality
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const resultContainer = document.getElementById('resultContainer');
+            const bmiValue = document.getElementById('bmiValue');
+            const bmiIndicator = document.getElementById('bmiIndicator');
+            const bmiStatus = document.getElementById('bmiStatus');
+            const weightStatus = document.getElementById('weightStatus');
+            const ageStatus = document.getElementById('ageStatus');
+            const healthProblems = document.getElementById('healthProblems');
+            const healthSolutions = document.getElementById('healthSolutions');
+            const actionPlan = document.getElementById('actionPlan');
+            const healthProgress = document.getElementById('healthProgress');
+            const problemCard = document.getElementById('problemCard');
+            const solutionCard = document.getElementById('solutionCard');
+            const bmiCategoryValue = document.getElementById('bmiCategoryValue');
+            const weightCategoryValue = document.getElementById('weightCategoryValue');
+            const bmrValue = document.getElementById('bmrValue');
+            const tdeeValue = document.getElementById('tdeeValue');
+            const detailedSuggestions = document.getElementById('detailedSuggestions');
+            
+            // Analyze button click
+            analyzeBtn.addEventListener('click', function() {
+                const gender = document.getElementById('gender').value;
+                const age = parseInt(document.getElementById('age').value);
+                const height = parseFloat(document.getElementById('height').value);
+                const weight = parseFloat(document.getElementById('weight').value);
+                
+                // Validate inputs
+                if (!gender || !age || !height || !weight) {
+                    alert(currentLanguage === 'english' ? 
+                        'Please fill in all fields' : 
+                        'تکایە هەموو خانەکان پڕبکەرەوە');
+                    return;
+                }
+                
+                if (age < 2 || age > 120) {
+                    alert(currentLanguage === 'english' ? 
+                        'Please enter a valid age between 2 and 120' : 
+                        'تکایە تەمەنێکی دروست بنووسە لە نێوان ٢ و ١٢٠');
+                    return;
+                }
+                
+                if (height < 50 || height > 300) {
+                    alert(currentLanguage === 'english' ? 
+                        'Please enter a valid height between 50cm and 300cm' : 
+                        'تکایە باڵایەکی دروست بنووسە لە نێوان ٥٠سم و ٣٠٠سم');
+                    return;
+                }
+                
+                if (weight < 2 || weight > 500) {
+                    alert(currentLanguage === 'english' ? 
+                        'Please enter a valid weight between 2kg and 500kg' : 
+                        'تکایە کێشێکی دروست بنووسە لە نێوان ٢کگ و ٥٠٠کگ');
+                    return;
+                }
+                
+                // Calculate BMI
+                const heightMeters = height / 100;
+                const bmi = weight / (heightMeters * heightMeters);
+                
+                // Display results
+                displayResults(gender, age, height, weight, bmi);
+            });
+            
+            function displayResults(gender, age, height, weight, bmi) {
+                // Update basic info
+                bmiValue.textContent = bmi.toFixed(1);
+                bmiStatus.textContent = `BMI: ${bmi.toFixed(1)}`;
+                weightStatus.textContent = currentLanguage === 'english' ? 
+                    `Weight: ${weight}kg` : 
+                    `کێش: ${weight}کگ`;
+                ageStatus.textContent = currentLanguage === 'english' ? 
+                    `Age: ${age} years` : 
+                    `تەمەن: ${age} ساڵ`;
+                
+                // Position indicator on scale (BMI range: 15 to 40 for visualization)
+                const indicatorPosition = Math.min(Math.max((bmi - 15) / (40 - 15) * 100, 0), 100);
+                bmiIndicator.style.left = `${indicatorPosition}%`;
+                
+                // Determine BMI category
+                let bmiCategory, bmiColor, healthScore, bmiCategoryTranslated;
+                if (bmi < 16) {
+                    bmiCategory = "Severely Underweight";
+                    bmiCategoryTranslated = currentLanguage === 'english' ? "Severely Underweight" : "کێشی زۆر کەم";
+                    bmiColor = "var(--underweight)";
+                    healthScore = 20 + (bmi - 15) * 4;
+                } else if (bmi < 18.5) {
+                    bmiCategory = "Underweight";
+                    bmiCategoryTranslated = currentLanguage === 'english' ? "Underweight" : "کێشی کەم";
+                    bmiColor = "var(--underweight)";
+                    healthScore = 40 + (bmi - 16) * 12;
+                } else if (bmi < 25) {
+                    bmiCategory = "Healthy Weight";
+                    bmiCategoryTranslated = currentLanguage === 'english' ? "Healthy Weight" : "کێشی تەندروست";
+                    bmiColor = "var(--healthy)";
+                    healthScore = 70 + (bmi - 18.5) * 4.6;
+                } else if (bmi < 30) {
+                    bmiCategory = "Overweight";
+                    bmiCategoryTranslated = currentLanguage === 'english' ? "Overweight" : "کێشی زۆر";
+                    bmiColor = "var(--overweight)";
+                    healthScore = 50 + (bmi - 25) * 4;
+                } else if (bmi < 35) {
+                    bmiCategory = "Obese Class I";
+                    bmiCategoryTranslated = currentLanguage === 'english' ? "Obese Class I" : "قەڵەو پلەی یەک";
+                    bmiColor = "var(--obese)";
+                    healthScore = 30 + (bmi - 30) * 4;
+                } else if (bmi < 40) {
+                    bmiCategory = "Obese Class II";
+                    bmiCategoryTranslated = currentLanguage === 'english' ? "Obese Class II" : "قەڵەو پلەی دوو";
+                    bmiColor = "var(--obese)";
+                    healthScore = 10 + (bmi - 35) * 4;
+                } else {
+                    bmiCategory = "Obese Class III";
+                    bmiCategoryTranslated = currentLanguage === 'english' ? "Obese Class III" : "قەڵەو پلەی سێ";
+                    bmiColor = "var(--obese)";
+                    healthScore = (bmi < 45) ? (45 - bmi) * 2 : 0;
+                }
+                
+                bmiStatus.style.backgroundColor = bmiColor;
+                bmiStatus.style.color = "white";
+                bmiCategoryValue.textContent = bmiCategoryTranslated;
+                bmiCategoryValue.style.color = bmiColor;
+                
+                // Update health progress bar
+                healthProgress.style.width = `${Math.min(Math.max(healthScore, 0), 100)}%`;
+                
+                // Calculate BMR (Basal Metabolic Rate)
+                let bmr;
+                if (gender === 'male') {
+                    bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+                } else {
+                    bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+                }
+                bmrValue.textContent = Math.round(bmr);
+                
+                // Calculate TDEE (Total Daily Energy Expenditure)
+                // Using moderate activity level (1.55 multiplier)
+                const tdee = bmr * 1.55;
+                tdeeValue.textContent = Math.round(tdee);
+                
+                // Weight category compared to ideal
+                const idealWeightRange = calculateIdealWeight(height, gender);
+                let weightCategory, weightCategoryColor;
+                if (weight < idealWeightRange[0]) {
+                    weightCategory = currentLanguage === 'english' ? "Below Ideal" : "کەمتر لە ئامانج";
+                    weightCategoryColor = "var(--underweight)";
+                } else if (weight > idealWeightRange[1]) {
+                    weightCategory = currentLanguage === 'english' ? "Above Ideal" : "زیاتر لە ئامانج";
+                    weightCategoryColor = bmi < 25 ? "var(--overweight)" : "var(--obese)";
+                } else {
+                    weightCategory = currentLanguage === 'english' ? "Ideal Range" : "لە پێوانەی ئامانج";
+                    weightCategoryColor = "var(--healthy)";
+                }
+                weightCategoryValue.textContent = weightCategory;
+                weightCategoryValue.style.color = weightCategoryColor;
+                
+                // Generate health analysis based on all factors
+                const analysis = generateHealthAnalysis(gender, age, height, weight, bmi, bmiCategory, bmiCategoryTranslated, bmr, tdee);
+                
+                // Update problem card
+                healthProblems.innerHTML = '';
+                analysis.problems.forEach(problem => {
+                    const p = document.createElement('p');
+                    p.innerHTML = `<strong>${problem.title}:</strong> ${problem.description}`;
+                    healthProblems.appendChild(p);
+                });
+                
+                // Update solution card
+                healthSolutions.innerHTML = '';
+                analysis.solutions.forEach(solution => {
+                    const p = document.createElement('p');
+                    p.innerHTML = `<strong>${solution.title}:</strong> ${solution.description}`;
+                    healthSolutions.appendChild(p);
+                });
+                
+                // Update action plan
+                actionPlan.innerHTML = '';
+                analysis.actionPlan.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    actionPlan.appendChild(li);
+                });
+                
+                // Update suggestion card
+                const suggestionText = document.getElementById('suggestionText');
+                suggestionText.textContent = analysis.suggestion;
+                
+                // Update detailed suggestions
+                detailedSuggestions.innerHTML = '';
+                analysis.detailedSuggestions.forEach(suggestion => {
+                    const p = document.createElement('p');
+                    p.innerHTML = `<strong>${suggestion.title}:</strong> ${suggestion.content}`;
+                    detailedSuggestions.appendChild(p);
+                });
+                
+                // Show results
+                resultContainer.style.display = 'block';
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            function generateHealthAnalysis(gender, age, height, weight, bmi, bmiCategory, bmiCategoryTranslated, bmr, tdee) {
+                const analysis = {
+                    problems: [],
+                    solutions: [],
+                    actionPlan: [],
+                    suggestion: "",
+                    detailedSuggestions: []
+                };
+                
+                // BMI-related issues
+                if (bmiCategory.includes("Underweight")) {
+                    analysis.problems.push({
+                        title: currentLanguage === 'english' ? "Low Body Weight" : "کێشی کەمی لەش",
+                        description: currentLanguage === 'english' ? 
+                            "Being underweight can lead to weakened immune function, fertility issues, osteoporosis, anemia, and hair loss. Severe underweight (BMI < 16) increases risk of organ failure." : 
+                            "کێشی کەم دەتوانێت ببێتە هۆی لاوازبوونی سیستەمی بەرگری، کێشەی بەخێوکردن، نەرمی ئێسکان، کەمی خوێن، و ڕیزشتنی قژ. کێشی زۆر کەم (BMI < 16) مەترسی لاوازبوونی ئەندامەکان زیاد دەکات."
+                    });
+                    
+                    analysis.solutions.push({
+                        title: currentLanguage === 'english' ? "Healthy Weight Gain" : "زیادکردنی کێشی تەندروست",
+                        description: currentLanguage === 'english' ? 
+                            "Focus on nutrient-dense foods rather than empty calories. Aim for 300-500 extra calories per day. Consider working with a nutritionist to address potential underlying causes." : 
+                            "سەرنج بدەرە سەر خواردنی پڕ ویتامین لەجیاتی کالۆری بەتاڵ. ئامانجی ٣٠٠-٥٠٠ کالۆری زیادە لە ڕۆژێکدا. کارکردن لەگەڵ پسپۆڕی خۆراکی بڕیار بدە بۆ چارەسەرکردنی هۆکاری بنەڕەتی."
+                    });
+                    
+                    analysis.actionPlan.push(
+                        currentLanguage === 'english' ? 
+                            "Increase calorie intake with healthy foods like nuts, avocados, whole grains, and lean proteins" : 
+                            "زیادکردنی کالۆری بە خواردنی تەندروست وەک گوێز، ئەڤۆکادۆ، دانەوێڵەی تەواو، و پڕۆتینی کەم چەوری",
+                        currentLanguage === 'english' ? 
+                            "Incorporate strength training 2-3 times weekly to build muscle mass" : 
+                            "ڕاهێنانی ماسولکە ٢-٣ جار لە هەفتەیەکدا زیاد بکە بۆ زیادکردنی ماسولکە",
+                        currentLanguage === 'english' ? 
+                            "Eat smaller, more frequent meals (5-6 per day) to increase intake" : 
+                            "ژەمێکی بچووکتر بخۆرە بەڵام زۆر جار لە ڕۆژێکدا (٥-٦ جار) بۆ زیادکردنی کالۆری",
+                        currentLanguage === 'english' ? 
+                            "Get checked for underlying conditions if weight loss is unexplained" : 
+                            "پشکنینی تەندروستی بکە ئەگەر کێسەکەت بێ هۆکار بوو"
+                    );
+                    
+                    analysis.suggestion = currentLanguage === 'english' ?
+                        `As someone with a BMI of ${bmi.toFixed(1)} (${bmiCategoryTranslated}), focus on gradual weight gain through nutrient-rich foods and strength training. Your estimated daily calorie needs are about ${Math.round(tdee)} calories for weight maintenance. For healthy weight gain, aim for ${Math.round(tdee) + 300}-${Math.round(tdee) + 500} calories daily.` :
+                        `وەک کەسێک بە BMIی ${bmi.toFixed(1)} (${bmiCategoryTranslated})، سەرنج بدەرە سەر زیادکردنی کێش بە خواردنی پڕ ویتامین و ڕاهێنانی ماسولکە. پێویستی ڕۆژانەی کالۆریت بۆ پاراستنی کێش نزیکەی ${Math.round(tdee)} کالۆرییە. بۆ زیادکردنی کێشی تەندروست، ئامانجی ${Math.round(tdee) + 300}-${Math.round(tdee) + 500} کالۆری لە ڕۆژێکدا.`;
+                    
+                    analysis.detailedSuggestions.push({
+                        title: currentLanguage === 'english' ? "Nutrition Focus" : "سەرنجدانی خۆراک",
+                        content: currentLanguage === 'english' ? 
+                            "Prioritize protein (1.2-1.6g per kg of body weight), healthy fats (avocados, nuts, olive oil), and complex carbs (whole grains, sweet potatoes). Include calorie-dense smoothies with nut butters, bananas, and full-fat yogurt." : 
+                            "پێشەنگی بدە بە پڕۆتین (١.٢-١.٦گ بۆ هەر کیلۆ کێش)، چەوری تەندروست (ئەڤۆکادۆ، گوێز، ڕۆنی زەیتون)، و کاربۆهایدرەیتی ئاڵۆز (دانەوێڵەی تەواو، پەتاتەی شیرین). سموزیی پڕ کالۆری لەگەڵ کەرەی گوێز، مۆز، و یۆگرتی پڕ چەوری زیاد بکە."
+                    });
+                } 
+                else if (bmiCategory.includes("Overweight") || bmiCategory.includes("Obese")) {
+                    analysis.problems.push({
+                        title: currentLanguage === 'english' ? "Excess Weight" : "کێشی زیاد",
+                        description: currentLanguage === 'english' ? 
+                            "Increases risk for heart disease (27% higher), type 2 diabetes (80% higher), high blood pressure, stroke, certain cancers (breast, colon), osteoarthritis, and sleep apnea." : 
+                            "مەترسی نەخۆشی دڵ (٢٧٪ زیاتر)، شەکرە جۆری ٢ (٨٠٪ زیاتر)، پەستانی خوێن، جەڵتەی مێشک، هەندێک جۆری شێرپەنجە (مەمک، ڕیخۆڵە)، نەخۆشی جومگە، و کەم هەناسەدان لە خەو زیاد دەکات."
+                    });
+                    
+                    if (bmi >= 30) {
+                        analysis.problems.push({
+                            title: currentLanguage === 'english' ? "Obesity Health Risks" : "مەترسییەکانی قەڵاوی",
+                            description: currentLanguage === 'english' ? 
+                                "Obesity significantly increases risk of metabolic syndrome, gallbladder disease, fatty liver, pregnancy complications, and reduces life expectancy by 5-20 years depending on severity." : 
+                                "قەڵاوی بە شێوەیەکی بەرچاو مەترسی سیندرۆمی مێتابۆلیک، نەخۆشی کیسەی زەرد، جەڵدەی چەوری، کێشەی دووگیانی زیاد دەکات و پێشبینی ژیان بە ٥-٢٠ ساڵ کەم دەکاتەوە بەپێی قورسی."
+                        });
+                    }
+                    
+                    analysis.solutions.push({
+                        title: currentLanguage === 'english' ? "Weight Management" : "ڕێکخستنی کێش",
+                        description: currentLanguage === 'english' ? 
+                            "Aim for gradual weight loss (0.5-1kg per week) through sustainable diet changes and increased activity. Even 5-10% weight loss provides significant health benefits." : 
+                            "ئامانجی کەمکردنەوەی کێش بە شێوەیەکی هێواش (٠.٥-١کگ لە هەفتەیەکدا) بە گۆڕینی خۆراکی بەردەوام و زیادکردنی چالاکی. تەنانەت کەمکردنەوەی ٥-١٠٪ی کێش سوودی گەورەی تەندروستی هەیە."
+                    });
+                    
+                    analysis.actionPlan.push(
+                        currentLanguage === 'english' ? 
+                            "Reduce portion sizes by 20% and limit processed foods, sugary drinks" : 
+                            "قەبارەی ژەم بە ٢٠٪ کەمبکەرەوە و خواردنی پرۆسەکراو، خواردنەوەی شەکراوی سنووردار بکە",
+                        currentLanguage === 'english' ? 
+                            "Increase daily steps to 8,000-10,000 and add strength training 2x weekly" : 
+                            "هەنگاوی ڕۆژانە بۆ ٨,٠٠٠-١٠,٠٠٠ زیاد بکە و ڕاهێنانی ماسولکە ٢ جار لە هەفتەیەکدا زیاد بکە",
+                        currentLanguage === 'english' ? 
+                            "Track food intake to identify patterns (use app or journal)" : 
+                            "خواردنەکانت تۆمار بکە بۆ دۆزینەوەی شێواز (ئەپ یان تێبینی بەکاربهێنە)",
+                        currentLanguage === 'english' ? 
+                            "Consult with healthcare provider about personalized weight loss strategies" : 
+                            "ڕاوێژ لەگەڵ پزیشک بگرە دەربارەی ستراتیجییە کەسیکراوەکانی کەمکردنەوەی کێش"
+                    );
+                    
+                    analysis.suggestion = currentLanguage === 'english' ?
+                        `With a BMI of ${bmi.toFixed(1)} (${bmiCategoryTranslated}), focus on sustainable lifestyle changes. Your estimated daily calorie needs are about ${Math.round(tdee)} calories for weight maintenance. For healthy weight loss (0.5kg/week), aim for ${Math.round(tdee) - 500} calories daily. Combine this with 150+ minutes of moderate exercise weekly.` :
+                        `بە BMIی ${bmi.toFixed(1)} (${bmiCategoryTranslated})، سەرنج بدەرە سەر گۆڕانکارییە هەمیشەیییەکانی شێوازی ژیان. پێویستی ڕۆژانەی کالۆریت بۆ پاراستنی کێش نزیکەی ${Math.round(tdee)} کالۆرییە. بۆ کەمکردنەوەی کێشی تەندروست (٠.٥کگ/هەفتە)، ئامانجی ${Math.round(tdee) - 500} کالۆری لە ڕۆژێکدا. ئەمە لەگەڵ ١٥٠+ خولەک ڕاهێنانی مامناوەند لە هەفتەیەکدا تێکەڵ بکە.`;
+                    
+                    analysis.detailedSuggestions.push({
+                        title: currentLanguage === 'english' ? "Nutrition Strategy" : "ستراتیجیی خۆراک",
+                        content: currentLanguage === 'english' ? 
+                            "Follow a Mediterranean-style diet: emphasize vegetables, fruits, whole grains, lean proteins, healthy fats. Reduce refined carbs and added sugars. Aim for 25-30g fiber daily to promote satiety." : 
+                            "خۆراکی شێوازی دەریایی سپی بەکاربهێنە: سەرنج بدەرە سەر سەوزە، میوە، دانەوێڵەی تەواو، پڕۆتینی کەم چەوری، چەوری تەندروست. کاربۆهایدرەیتی پەرێسەکراو و شەکری زیادکراو کەمبکەرەوە. ئامانجی ٢٥-٣٠گ ڕیشاڵ لە ڕۆژێکدا بۆ زیادکردنی هەستکردن بە پڕی."
+                    });
+                }
+                else {
+                    analysis.problems.push({
+                        title: currentLanguage === 'english' ? "Maintenance Needed" : "پێویستی بە پاراستن",
+                        description: currentLanguage === 'english' ? 
+                            "Your weight is in a healthy range, but maintaining it requires ongoing attention as metabolism slows ~2% per decade after age 30. Lifestyle creep can lead to gradual weight gain." : 
+                            "کێشت لە پێوانەی تەندروستیدایە، بەڵام پاراستنی پێویستی بە چاودێری بەردەوام هەیە چونکە مێتابۆلیزم هەر ١٠ ساڵ دوای تەمەنی ٣٠ ساڵی نزیکەی ٢٪ خاو دەبێتەوە. گۆڕانی شێوازی ژیان دەتوانێت ببێتە هۆی زیادبوونی کێش."
+                    });
+                    
+                    analysis.solutions.push({
+                        title: currentLanguage === 'english' ? "Preventive Health" : "پاراستنی تەندروستی",
+                        description: currentLanguage === 'english' ? 
+                            "Focus on maintaining your healthy habits and preventing future weight gain through consistent activity and mindful eating. Regular health screenings help catch changes early." : 
+                            "سەرنج بدەرە سەر پاراستنی ڕەفتاری تەندروست و ڕێگرتن لە زیادبوونی کێش لە داهاتوودا بە چالاکی بەردەوام و خواردنی بەئاگا. پشکنینی بەردەوامی تەندروستی یارمەتی دەدات گۆڕانکاری لە سەرەتادا بدۆزرێتەوە."
+                    });
+                    
+                    analysis.actionPlan.push(
+                        currentLanguage === 'english' ? 
+                            "Continue balanced diet with variety of colorful fruits/vegetables (5+ servings daily)" : 
+                            "بەردەوام بە لە خواردنی هاوسەنگ لەگەڵ جۆراوجۆری میوە/سەوزی ڕەنگاوڕەنگ (٥+ خواردنەوە لە ڕۆژێکدا)",
+                        currentLanguage === 'english' ? 
+                            "Engage in both cardio (150 min/week) and strength training (2x/week)" : 
+                            "بەشداری لە ڕاهێنانی کاردیۆ (١٥٠ خولەک/هەفتە) و ماسولکە (٢ جار/هەفتە) بکە",
+                        currentLanguage === 'english' ? 
+                            "Monitor weight weekly to catch any 2+ kg changes early" : 
+                            "کێشت هەفتانە چاودێری بکە بۆ دۆزینەوەی هەر گۆڕانکارییەکی ٢+ کگ لە سەرەتادا",
+                        currentLanguage === 'english' ? 
+                            "Get annual health checkups including blood pressure and cholesterol" : 
+                            "پشکنینی ساڵانەی تەندروستی بکە لەگەڵ پەستانی خوێن و کۆلیسترۆڵ"
+                    );
+                    
+                    analysis.suggestion = currentLanguage === 'english' ?
+                        `Congratulations on maintaining a healthy BMI of ${bmi.toFixed(1)}! Your estimated daily calorie needs are about ${Math.round(tdee)} calories for weight maintenance. To sustain this, continue with balanced nutrition (45-65% carbs, 20-35% fat, 10-35% protein), regular exercise, and stress management.` :
+                        `پیرۆزە بە پاراستنی BMIی تەندروستی ${bmi.toFixed(1)}! پێویستی ڕۆژانەی کالۆریت بۆ پاراستنی کێش نزیکەی ${Math.round(tdee)} کالۆرییە. بۆ پاراستنی ئەمە، بەردەوام بە لە خۆراکی هاوسەنگ (٤٥-٦٥٪ کاربۆهایدرەیت، ٢٠-٣٥٪ چەوری، ١٠-٣٥٪ پڕۆتین)، ڕاهێنانی بەردەوام، و ڕێکخستنی فشار.`;
+                    
+                    analysis.detailedSuggestions.push({
+                        title: currentLanguage === 'english' ? "Maintenance Tips" : "ئامۆژگارییەکانی پاراستن",
+                        content: currentLanguage === 'english' ? 
+                            "Practice intuitive eating - eat when hungry, stop when satisfied. Include resistance training to maintain muscle mass as you age. Get 7-9 hours of quality sleep nightly, as poor sleep disrupts hunger hormones." : 
+                            "خواردنی هۆشیارانە - کاتێک برسایت خۆرەکە، کاتێک پڕت بوو بوەستە. ڕاهێنانی ماسولکە زیاد بکە بۆ پاراستنی ماسولکە لەگەڵ تەمەنت. ٧-٩ کاتژمێر خەوی کوالیتی لە شەوێکدا بەدەست بهێنە، چونکە خەوی خراپ یەکسانی هۆرمۆنەکانی برسی تێکدەدات."
+                    });
+                }
+                
+                // Age-related considerations
+                if (age > 50) {
+                    analysis.problems.push({
+                        title: currentLanguage === 'english' ? "Age-Related Changes" : "گۆڕانی پەیوەست بە تەمەن",
+                        description: currentLanguage === 'english' ? 
+                            "After 50, muscle mass declines ~1-2% yearly (sarcopenia), bone density decreases, metabolism slows, and risk of chronic diseases increases. Protein needs increase to 1.0-1.2g per kg of body weight." : 
+                            "دوای ٥٠ ساڵی، ماسولکە نزیکەی ١-٢٪ ساڵانە کەم دەبێتەوە (سارکۆپینیا)، چڕی ئێسک کەم دەبێتەوە، مێتابۆلیزم خاو دەبێتەوە، و مەترسی نەخۆشی درێژخایەن زیاد دەکات. پێویستی پڕۆتین بۆ ١.٠-١.٢گ بۆ هەر کیلۆ کێش زیاد دەکات."
+                    });
+                    
+                    analysis.solutions.push({
+                        title: currentLanguage === 'english' ? "Healthy Aging" : "تەمەنێکی تەندروست",
+                        description: currentLanguage === 'english' ? 
+                            "Focus on maintaining muscle mass through protein and strength training, bone health through calcium/vitamin D, and cognitive health through social engagement and mental stimulation." : 
+                            "سەرنج بدەرە سەر پاراستنی ماسولکە بە پڕۆتین و ڕاهێنانی ماسولکە، تەندروستی ئێسک بە کالسیۆم/ڤیتامین دی، و تەندروستی مێشک بە بەشداری کۆمەڵایەتی و هاندانی دەروونی."
+                    });
+                    
+                    analysis.actionPlan.push(
+                        currentLanguage === 'english' ? 
+                            "Ensure adequate protein (25-30g per meal) to prevent muscle loss" : 
+                            "دڵنیابەرە لە وەرگرتنی پڕۆتینی پێویست (٢٥-٣٠گ بۆ هەر ژەم) بۆ ڕێگرتن لە لاوازبوونی ماسولکە",
+                        currentLanguage === 'english' ? 
+                            "Include weight-bearing and balance exercises 3x weekly" : 
+                            "ڕاهێنانی بەرکەوتەی کێش و هاوسەنگی ٣ جار لە هەفتەیەکدا زیاد بکە",
+                        currentLanguage === 'english' ? 
+                            "Get bone density scan and annual blood work" : 
+                            "پشکنینی چڕی ئێسک و پشکنینی خوێنی ساڵانە بکە",
+                        currentLanguage === 'english' ? 
+                            "Consider supplements: vitamin D (1000-2000 IU), omega-3s, possibly B12" : 
+                            "پارچەی خۆراکی بڕیار بدە: ڤیتامین دی (١٠٠٠-٢٠٠٠ IU)، ئۆمێگا ٣، و بەتوانایی B12"
+                    );
+                    
+                    analysis.detailedSuggestions.push({
+                        title: currentLanguage === 'english' ? "Aging Well" : "تەمەنێکی باش",
+                        content: currentLanguage === 'english' ? 
+                            `At age ${age}, prioritize resistance training to combat sarcopenia. Aim for 1.0-1.2g protein per kg body weight daily, spread evenly across meals. Get 1200mg calcium (through diet or supplements) and 800-2000IU vitamin D daily for bone health.` :
+                            `لە تەمەنی ${age} ساڵیدا، ڕاهێنانی ماسولکە زیاد بکە بۆ ڕێگرتن لە سارکۆپینیا. ئامانجی ١.٠-١.٢گ پڕۆتین بۆ هەر کیلۆ کێش لە ڕۆژێکدا، بە شێوەیەکی یەکسان لە نێوان ژەمەکاندا بڵاو بکەرەوە. ١٢٠٠مگ کالسیۆم (بە خۆراک یان پارچەی خۆراکی) و ٨٠٠-٢٠٠٠IU ڤیتامین دی لە ڕۆژێکدا بۆ تەندروستی ئێسک وەربگرە.`
+                    });
+                }
+                else if (age < 18) {
+                    analysis.problems.push({
+                        title: currentLanguage === 'english' ? "Growth Considerations" : "پێویستییەکانی گەشە",
+                        description: currentLanguage === 'english' ? 
+                            "Children and teens have higher calorie and nutrient needs for growth. BMI categories differ for those under 18 - consult pediatric growth charts. Restrictive dieting can impair growth and development." : 
+                            "منداڵان و هەرزەکاران پێویستی زیاتری کالۆری و ماددەی خۆراکییان هەیە بۆ گەشە. جۆرەکانی BMI جیاوازن بۆ ئەوانەی لە ١٨ ساڵی کەمن - سەیری خشتەی گەشەی پزیشکی منداڵان بکە. خۆراکی سنووردار دەتوانێت گەشە و پەرەسەندن تێکبدات."
+                    });
+                    
+                    analysis.solutions.push({
+                        title: currentLanguage === 'english' ? "Healthy Growth Focus" : "سەرنجدان بە گەشەی تەندروست",
+                        description: currentLanguage === 'english' ? 
+                            "Emphasize balanced nutrition for proper development rather than weight numbers. Include adequate calories, protein, calcium, iron and other nutrients needed for growth spurts and puberty." : 
+                            "سەرنج بدەرە سەر خۆراکی هاوسەنگ بۆ گەشەی ڕاست لەجیاتی ژمارەی کێش. کالۆری، پڕۆتین، کالسیۆم، ئاسن و ماددە خۆراکییەکانی تر کە پێویستن بۆ خێرایی گەشە و گەیشتن زیاد بکە."
+                    });
+                    
+                    analysis.actionPlan.push(
+                        currentLanguage === 'english' ? 
+                            "Focus on balanced meals with all food groups (avoid restrictive diets)" : 
+                            "سەرنج بدەرە سەر ژەمی هاوسەنگ لەگەڵ هەموو گروپە خۆراکییەکان (خۆراکی سنووردار ڕێگرە)",
+                        currentLanguage === 'english' ? 
+                            "Encourage 60+ minutes daily of physical activity (sports, play)" : 
+                            "هاندانی ٦٠+ خولەک چالاکی جەستەیی لە ڕۆژێکدا (وەرزش، یاری)",
+                        currentLanguage === 'english' ? 
+                            "Ensure adequate calcium (1300mg) and iron (8-15mg) intake" : 
+                            "دڵنیابەرە لە وەرگرتنی بڕی پێویستی کالسیۆم (١٣٠٠مگ) و ئاسن (٨-١٥مگ)",
+                        currentLanguage === 'english' ? 
+                            "Promote positive body image and healthy habits, not weight focus" : 
+                            "پەرەپێدانی وێنەیەکی ئەرێنی لەش و ڕەفتاری تەندروست، نەک سەرنجدان بە کێش"
+                    );
+                    
+                    analysis.detailedSuggestions.push({
+                        title: currentLanguage === 'english' ? "Growing Well" : "گەشەی باش",
+                        content: currentLanguage === 'english' ? 
+                            `At age ${age}, focus on nutrient-dense foods to support growth: lean proteins, dairy/alternatives, whole grains, fruits and vegetables. Limit sugary drinks and snacks. Engage in varied physical activities to develop coordination and fitness.` :
+                            `لە تەمەنی ${age} ساڵیدا، سەرنج بدەرە سەر خواردنی پڕ ماددەی خۆراکی بۆ پشتیوانی گەشە: پڕۆتینی کەم چەوری، شیر/جێگرەوە، دانەوێڵەی تەواو، میوە و سەوزە. خواردنەوە و خواردنی شەکراوی سنووردار بکە. بەشداری لە چالاکییە جۆراوجۆرەکانی جەستەیی بکە بۆ پەرەپێدانی هاوکاری و لەشجوانی.`
+                    });
+                }
+                
+                // Gender-specific considerations
+                if (gender === "female") {
+                    analysis.problems.push({
+                        title: currentLanguage === 'english' ? "Women's Health" : "تەندروستی ئافرەتان",
+                        description: currentLanguage === 'english' ? 
+                            "Women need more iron (especially during reproductive years), calcium for bone health, and folate before/during pregnancy. Hormonal changes (menstruation, pregnancy, menopause) affect weight and metabolism." : 
+                            "ئافرەتان پێویستیان بە ئاسنی زیاترە (بەتایبەت لە ساڵەکانی بەخێوکردن)، کالسیۆم بۆ تەندروستی ئێسک، و فۆلیک ئەسید پێش/لە کاتی دووگیانیدا. گۆڕانی هۆرمۆن (پەریود، دووگیانی، یاسەی پیری) کاریگەری لەسەر کێش و مێتابۆلیزم هەیە."
+                    });
+                    
+                    analysis.solutions.push({
+                        title: currentLanguage === 'english' ? "Women's Nutrition" : "خۆراکی ئافرەتان",
+                        description: currentLanguage === 'english' ? 
+                            "Ensure adequate iron (18mg/day, 27mg if pregnant), calcium (1000-1200mg), and folate (400mcg). Monitor weight changes related to menstrual cycle but avoid daily weighing." : 
+                            "دڵنیابەرە لە وەرگرتنی بڕی پێویستی ئاسن (١٨مگ/رۆژ، ٢٧مگ ئەگەر دووگیان بیت)، کالسیۆم (١٠٠٠-١٢٠٠مگ)، و فۆلیک ئەسید (٤٠٠mcg). گۆڕانی کێش پەیوەست بە سووڕی پەریود چاودێری بکە بەڵام ڕێگری لە کێشکردنی ڕۆژانە بکە."
+                    });
+                    
+                    analysis.actionPlan.push(
+                        currentLanguage === 'english' ? 
+                            "Include iron-rich foods (red meat, beans, spinach) + vitamin C to enhance absorption" : 
+                            "خواردنی پڕ ئاسن (گۆشتی سوور، باقی، سپیناج) + ڤیتامین سی زیاد بکە بۆ زیادکردنی ڕەگەزگرتن",
+                        currentLanguage === 'english' ? 
+                            "Get 3-4 servings daily of calcium-rich foods (dairy, fortified alternatives)" : 
+                            "٣-٤ خواردنەوە لە ڕۆژێکدا لە خواردنی پڕ کالسیۆم (شیر، جێگرەوەی بەهێزکراو) وەربگرە",
+                        currentLanguage === 'english' ? 
+                            "Be aware of weight fluctuations (1-5lbs) during menstrual cycle" : 
+                            "ئاگاداری گۆڕانی کێش (١-٥ پاوەند) لە کاتی سووڕی پەریود بە",
+                        currentLanguage === 'english' ? 
+                            "Discuss reproductive health needs with healthcare provider" : 
+                            "لەگەڵ پزیشکەکەت باسی پێویستییەکانی تەندروستی زاوزێ بکە"
+                    );
+                    
+                    analysis.detailedSuggestions.push({
+                        title: currentLanguage === 'english' ? "Female-Specific Advice" : "ئامۆژگاری تایبەت بە ئافرەتان",
+                        content: currentLanguage === 'english' ? 
+                            "For menstrual health: Ensure adequate iron and omega-3s to reduce cramps. For bone health: Get weight-bearing exercise and enough calcium/vitamin D to prevent osteoporosis later. During menopause: Metabolism slows ~5% - adjust calories downward slightly and prioritize strength training." : 
+                            "بۆ تەندروستی پەریود: دڵنیابەرە لە وەرگرتنی بڕی پێویستی ئاسن و ئۆمێگا ٣ بۆ کەمکردنەوەی ئازار. بۆ تەندروستی ئێسک: ڕاهێنانی بەرکەوتەی کێش و بڕی پێویستی کالسیۆم/ڤیتامین دی وەربگرە بۆ ڕێگرتن لە نەرمی ئێسک لە داهاتوودا. لە کاتی یاسەی پیری: مێتابۆلیزم نزیکەی ٥٪ خاو دەبێتەوە - کەمێک کالۆری کەمبکەرەوە و ڕاهێنانی ماسولکە زیاد بکە."
+                    });
+                } else {
+                    analysis.problems.push({
+                        title: currentLanguage === 'english' ? "Men's Health" : "تەندروستی پیاوان",
+                        description: currentLanguage === 'english' ? 
+                            "Men typically have higher muscle mass and calorie needs but often neglect preventive care. Higher risk of heart disease (starting earlier), prostate issues, and alcohol-related problems." : 
+                            "پیاوان بە شێوەیەکی گشتی ماسولکەی زیاتر و پێویستی کالۆریان هەیە بەڵام زۆرجار چاودێری پێشگیریکارانە پشتگوێ دەخەن. مەترسی زیاتری نەخۆشی دڵ (لە سەرەتای تەمەن)، کێشەی پرۆستات، و کێشە پەیوەستەکانی کحول."
+                    });
+                    
+                    analysis.solutions.push({
+                        title: currentLanguage === 'english' ? "Men's Wellness" : "تەندروستی پیاوان",
+                        description: currentLanguage === 'english' ? 
+                            "Focus on heart-healthy habits (exercise, not smoking, managing stress), regular health screenings (blood pressure, cholesterol, prostate), and moderate alcohol intake (≤2 drinks/day)." : 
+                            "سەرنج بدەرە سەر ڕەفتاری تەندروستی دڵ (ڕاهێنان، جێهێشتنی جگەرە، ڕێکخستنی فشار)، پشکنینی بەردەوامی تەندروستی (پەستانی خوێن، کۆلیسترۆڵ، پرۆستات)، و بەکارهێنانی کحول بە شێوەیەکی مامناوەند (≤٢ خواردنەوە/رۆژ)."
+                    });
+                    
+                    analysis.actionPlan.push(
+                        currentLanguage === 'english' ? 
+                            "Monitor heart health through regular cardio exercise and checkups" : 
+                            "چاودێری تەندروستی دڵ بکە بە ڕاهێنانی کاردیۆی بەردەوام و پشکنین",
+                        currentLanguage === 'english' ? 
+                            "Include foods rich in lycopene (tomatoes) and omega-3s (fatty fish)" : 
+                            "خواردنی پڕ لایکۆپین (تەماتە) و ئۆمێگا ٣ (ماسی چەوری) زیاد بکە",
+                        currentLanguage === 'english' ? 
+                            "Discuss prostate screening starting at age 50 (45 if high risk)" : 
+                            "لە تەمەنی ٥٠ ساڵیدا (٤٥ ئەگەر مەترسی زۆر هەبێت) باسی پشکنینی پرۆستات بکە",
+                        currentLanguage === 'english' ? 
+                            "Limit alcohol to ≤14 drinks/week and have alcohol-free days" : 
+                            "کحول بە ≤١٤ خواردنەوە/هەفتە سنووردار بکە و ڕۆژی بێ کحول هەبێت"
+                    );
+                    
+                    analysis.detailedSuggestions.push({
+                        title: currentLanguage === 'english' ? "Male-Specific Advice" : "ئامۆژگاری تایبەت بە پیاوان",
+                        content: currentLanguage === 'english' ? 
+                            "For heart health: Get 150+ minutes cardio weekly, eat fatty fish 2x/week, manage stress. For prostate health: Eat cooked tomatoes, maintain healthy weight, get screenings at appropriate age. For muscle maintenance: Consume 1.2-1.6g protein per kg body weight daily, do strength training 2-3x weekly." : 
+                            "بۆ تەندروستی دڵ: ١٥٠+ خولەک ڕاهێنانی کاردیۆ لە هەفتەیەکدا، ماسی چەوری ٢ جار/هەفتە بخۆرە، فشار ڕێکبخە. بۆ تەندروستی پرۆستات: تەماتەی کوڵاو بخۆرە، کێشی تەندروست بپارێزە، لە تەمەنی گونجاو پشکنین بکە. بۆ پاراستنی ماسولکە: ١.٢-١.٦گ پڕۆتین بۆ هەر کیلۆ کێش لە ڕۆژێکدا بخۆرە، ڕاهێنانی ماسولکە ٢-٣ جار/هەفتە بکە."
+                    });
+                }
+                
+                // Height-weight proportion check
+                const idealWeightRange = calculateIdealWeight(height, gender);
+                if (weight < idealWeightRange[0]) {
+                    analysis.problems.push({
+                        title: currentLanguage === 'english' ? "Below Ideal Weight" : "کەمتر لە کێشی ئامانج",
+                        description: currentLanguage === 'english' ? 
+                            `Your weight is below the recommended range (${idealWeightRange[0].toFixed(1)}-${idealWeightRange[1].toFixed(1)}kg) for your height. This may indicate insufficient nutrition or underlying health issues.` : 
+                            `کێشت کەمترە لە پێوانەی ئامۆژگاریکراو (${idealWeightRange[0].toFixed(1)}-${idealWeightRange[1].toFixed(1)}کگ) بۆ باڵات. ئەمە دەتوانێت نیشانەی خۆراکی ناتەواو یان کێشەی تەندروستی بنەڕەتی بێت.`
+                    });
+                } else if (weight > idealWeightRange[1]) {
+                    analysis.problems.push({
+                        title: currentLanguage === 'english' ? "Above Ideal Weight" : "زیاتر لە کێشی ئامانج",
+                        description: currentLanguage === 'english' ? 
+                            `Your weight is above the recommended range (${idealWeightRange[0].toFixed(1)}-${idealWeightRange[1].toFixed(1)}kg) for your height. This increases strain on joints and metabolic stress.` : 
+                            `کێشت زیاترە لە پێوانەی ئامۆژگاریکراو (${idealWeightRange[0].toFixed(1)}-${idealWeightRange[1].toFixed(1)}کگ) بۆ باڵات. ئەمە فشاری زیاتر لەسەر جومگە و فشار لەسەر مێتابۆلیزم زیاد دەکات.`
+                    });
+                }
+                
+                return analysis;
+            }
+            
+            function calculateIdealWeight(height, gender) {
+                // Simple ideal weight range calculation based on height
+                // Using Devine formula with adjustment for gender
+                const heightMeters = height / 100;
+                let baseWeight = 21.5 * (heightMeters * heightMeters); // BMI 21.5 as midpoint
+                
+                // Gender adjustment (very simplified)
+                if (gender === 'male') {
+                    baseWeight *= 1.05;
+                } else {
+                    baseWeight *= 0.95;
+                }
+                
+                // Return range of ±10% from base weight
+                return [baseWeight * 0.9, baseWeight * 1.1];
+            }
+            
+            function updateResultsForLanguage() {
+                // This function would update the displayed results when language changes
+                // For simplicity, we'll just re-run the analysis with the current values
+                if (document.getElementById('resultContainer').style.display === 'block') {
+                    const gender = document.getElementById('gender').value;
+                    const age = parseInt(document.getElementById('age').value);
+                    const height = parseFloat(document.getElementById('height').value);
+                    const weight = parseFloat(document.getElementById('weight').value);
+                    
+                    if (gender && age && height && weight) {
+                        const heightMeters = height / 100;
+                        const bmi = weight / (heightMeters * heightMeters);
+                        displayResults(gender, age, height, weight, bmi);
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
