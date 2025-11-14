@@ -463,6 +463,42 @@
             font-size: 1.2rem;
             cursor: pointer;
         }
+        .search-results {
+    margin: 1rem 0;
+}
+
+.search-result-item {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 10px;
+    box-shadow: var(--card-shadow);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-right: 4px solid var(--primary);
+}
+
+.search-result-item:active {
+    transform: scale(0.98);
+}
+
+.search-result-item h3 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.search-result-item p {
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.results-count {
+    text-align: center;
+    padding: 1rem;
+    color: var(--primary);
+    font-weight: bold;
+}
     </style>
 </head>
 <body>
@@ -479,7 +515,11 @@
                 <i class="fas fa-search" id="mobileSearchIcon"></i>
             </div>
         </header>
-
+<!-- لە ناو بەشی homeSection زیاد بکە -->
+<div class="search-results" id="searchResults" style="display: none;">
+    <div class="results-count" id="resultsCount"></div>
+    <div id="searchResultsList"></div>
+</div>
         <main class="main-content">
             <!-- Home Section -->
             <section id="homeSection">
@@ -1393,6 +1433,68 @@
         
         // Show home section by default
         showSection('home');
+        // Search for disease - چاکسازیکراو
+function searchDisease() {
+    const searchTerm = diseaseSearch.value.trim().toLowerCase();
+    if (searchTerm === '') {
+        // ئەگەر بەتاڵە، لیستی ئاسایی نیشان بدە
+        searchResults.style.display = 'none';
+        diseaseList.style.display = 'grid';
+        return;
+    }
+    
+    // هەموو نەخۆشیە هاوشێوەکان بدۆزەرەوە
+    const foundDiseases = diseases.filter(disease => 
+        disease.name.toLowerCase().includes(searchTerm)
+    );
+    
+    if (foundDiseases.length > 0) {
+        // لیستی نەتەجەی گەڕان نیشان بدە
+        showSearchResults(foundDiseases);
+    } else {
+        // نەخۆشی نەدۆزرایەوە
+        homeSection.style.display = 'block';
+        aboutSection.style.display = 'none';
+        contactSection.style.display = 'none';
+        resultSection.style.display = 'none';
+        searchResults.style.display = 'none';
+        diseaseList.style.display = 'none';
+        diseaseNotFound.style.display = 'block';
+        diseaseNotFound.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Show search results - فەنکشنی نوێ
+function showSearchResults(foundDiseases) {
+    // ژمارەی نەتەجەکان نیشان بدە
+    resultsCount.textContent = `${foundDiseases.length} نەخۆشی دۆزرایەوە بۆ "${diseaseSearch.value}"`;
+    
+    // لیستی نەتەجەکان دروست بکە
+    searchResultsList.innerHTML = '';
+    foundDiseases.forEach(disease => {
+        const resultItem = document.createElement('div');
+        resultItem.className = 'search-result-item';
+        resultItem.innerHTML = `
+            <h3>${disease.name}</h3>
+            <p><i class="fas fa-leaf"></i> چارەسەری سروشتی: ${disease.natural.slice(0, 2).join('، ')}...</p>
+            <p><i class="fas fa-stethoscope"></i> چارەسەری زانستی: ${disease.medical.slice(0, 2).join('، ')}...</p>
+        `;
+        resultItem.addEventListener('click', () => showDiseaseDetails(disease));
+        searchResultsList.appendChild(resultItem);
+    });
+    
+    // نەتەجەکان نیشان بدە و لیستی ئاسایی بشارەوە
+    searchResults.style.display = 'block';
+    diseaseList.style.display = 'none';
+    diseaseNotFound.style.display = 'none';
+    
+    // بۆ سەرەوە بڕۆ
+    searchResults.scrollIntoView({ behavior: 'smooth' });
+}
+// Elements for search results
+const searchResults = document.getElementById('searchResults');
+const searchResultsList = document.getElementById('searchResultsList');
+const resultsCount = document.getElementById('resultsCount');
     </script>
 </body>
 </html>
